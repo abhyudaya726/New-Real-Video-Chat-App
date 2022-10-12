@@ -70,6 +70,37 @@ $(function () {
 
 })
 
+$("#mute_button").click(function () {
+    const enabled = myStream.getAudioTracks()[0].enabled;
+    if (enabled) {
+        myStream.getAudioTracks()[0].enabled = false;
+        html = `<i class="fas fa-microphone-slash"></i>`;
+        $("#mute_button").toggleClass("background_red");
+        $("#mute_button").html(html)
+    } else {
+        myStream.getAudioTracks()[0].enabled = true;
+        html = `<i class="fas fa-microphone"></i>`;
+        $("#mute_button").toggleClass("background_red");
+        $("#mute_button").html(html)
+    }
+})
+
+$("#stop_video").click(function () {
+    const enabled = myStream.getVideoTracks()[0].enabled;
+    if (enabled) {
+        myStream.getVideoTracks()[0].enabled = false;
+        html = `<i class="fas fa-video-slash"></i>`;
+        $("#stop_video").toggleClass("background_red");
+        $("#stop_video").html(html)
+    } else {
+        myStream.getVideoTracks()[0].enabled = true;
+        html = `<i class="fas fa-video"></i>`;
+        $("#stop_video").toggleClass("background_red");
+        $("#stop_video").html(html)
+    }
+})
+
+
 peer.on("open", (id) => {
     socket.emit("join-room", ROOM_ID, id, user);
 });
