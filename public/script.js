@@ -14,11 +14,29 @@ let myStream
 navigator.mediaDevices.getUserMedia({audio:true,video:true}).then((stream)=>{
     myStream = stream
     addVideostream(myVideo,stream)
+    socket.on("user-connected",(userId) =>{
+        connected_to_new_user(userId,stream)
+    })
+    peer.on("call",(call) =>{
+        call.answer(stream)
+        const video = document.createElement("video")
+        call.on("stream",(userVideoStream) =>{
+        addVideostream(video,userVideoStream)
+    })
+    })
 })
+
+function connected_to_new_user(userId,stream){
+    const call = peer.call(userId,stream)
+    const video = document.createElement("video")
+    call.on("stream",(userVideoStream) =>{
+        addVideostream(video,userVideoStream)
+    })
+}
 
 function addVideostream(video,stream){
     video.srcObject = stream
-    video.addEventListener("loadedmetadata",()=>{
+    video.addEventListner("loadedmetadata",()=>{
         video.play()
         $("#Video-Grid").append(video)
     })
